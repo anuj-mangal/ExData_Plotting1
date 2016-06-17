@@ -1,0 +1,13 @@
+data <- read.csv2(file = "household_power_consumption.txt", sep = ";" , stringsAsFactors =  FALSE )
+data$Date <- as.Date(data$Date, format = "%d/%m/%Y")
+data_to_be_used <- data[data$Date >= "2007-02-01" & data$Date <= "2007-02-02", ]
+data_to_be_used <- mutate(data_to_be_used, date_time = paste(data_to_be_used$Date, data_to_be_used$Time, sep =" "))
+data_to_be_used$date_time <- strptime(data_to_be_used$date_time, "%Y-%m-%d %H:%M:%S")
+png(filename = "plot3.png", width = 480, height = 480, units = "px")
+with(data_to_be_used, plot(date_time, Sub_metering_1, type = "n" , xlab = "" , ylab = "Energy sub metering"))
+with(data_to_be_used, lines(date_time,Sub_metering_1, type="l", col = "black" ))
+with(data_to_be_used, lines(date_time,Sub_metering_2, type="l", col = "red" ))
+with(data_to_be_used, lines(date_time,Sub_metering_3, type="l", col = "blue" ))
+colors = c("black", "red", "blue")
+legend("topright" , legend = c("Sub_metering_1","Sub_metering_2","Sub_metering_3") , col = colors , lty = "solid")
+dev.off()
